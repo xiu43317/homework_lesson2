@@ -1,5 +1,6 @@
 const http = require("http")
 const mongoose = require("mongoose")
+const headers = require("./headers")
 const Post = require('./modals/posts')
 const handleSuccess = require('./handleSuccess')
 const handleError = require('./handleError')
@@ -33,7 +34,7 @@ const requestListener = async (req, res) => {
             name: data.name,
             content: data.content,
           });
-          handleSuccess(res,data)
+          handleSuccess(res,newPost)
         } else {
           handleError(res)
         }
@@ -44,7 +45,11 @@ const requestListener = async (req, res) => {
   } else if (req.url.startsWith("/posts/") && req.method == "DELETE") {
     const id = req.url.split("/").pop();
     await Post.findByIdAndDelete(id);
-    handleSuccess(res)
+    const message =
+      {
+        delete: "yes"
+      }
+      handleSuccess(res,message)
   } else if (req.method == "OPTIONS") {
     res.writeHead(200, headers);
     res.end();
@@ -67,6 +72,13 @@ const requestListener = async (req, res) => {
             handleError(res,error)
         }
       });
+  } else if(req.url.startsWith("/posts") && req.method == "DELETE") {
+    await Post.deleteMany({})
+    const message =
+    {
+      delete: "yes"
+    }
+    handleSuccess(res,message)
   } else {
     res.writeHead(404, headers);
     res.write(
