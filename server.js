@@ -44,12 +44,16 @@ const requestListener = async (req, res) => {
     });
   } else if (req.url.startsWith("/posts/") && req.method == "DELETE") {
     const id = req.url.split("/").pop();
-    await Post.findByIdAndDelete(id);
-    const message =
-      {
-        delete: "yes"
-      }
-      handleSuccess(res,message)
+    try{
+      await Post.findByIdAndDelete(id);
+      const message =
+        {
+          delete: "yes"
+        }
+        handleSuccess(res,message)
+    }catch(error){
+      handleError(res,error)
+    }
   } else if (req.method == "OPTIONS") {
     res.writeHead(200, headers);
     res.end();
