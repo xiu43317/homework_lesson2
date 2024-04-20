@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
-const postSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema(
+  {
     content: {
       type: String,
       required: [true, "Content 未填寫"],
@@ -11,7 +12,7 @@ const postSchema = new mongoose.Schema({
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
+      default: Date.now,
       select: false,
     },
     name: {
@@ -22,7 +23,11 @@ const postSchema = new mongoose.Schema({
       type: Number,
       default: 0,
     },
-  })
+  },
+  {
+    versionKey: false
+  }
+)
   const Post = mongoose.model("post", postSchema)
 
   module.exports = Post

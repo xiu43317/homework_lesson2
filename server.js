@@ -67,7 +67,11 @@ const requestListener = async (req, res) => {
             const updatePost = await Post.findByIdAndUpdate(id,{
               name: data.name,
               content: data.content,
-            });
+            },
+            {
+              runValidators: true
+            }
+          );
             handleSuccess(res,updatePost)
           } else {
             handleError(res)
